@@ -26,7 +26,6 @@ router.post("/friends", function(req, res) {
       photo = element.photo;
     }
   });
-  console.log("Name: " + name);
   var result = {
     name: name,
     photo: photo

@@ -276,8 +276,6 @@
           $("#q9").val(),
           $("#q10").val()
         ];
-        console.log(arr.indexOf(""));
-        console.log(arr[1]);
         if (
           $("#name").val() === "" ||
           $("#photo").val() === "" ||
@@ -292,13 +290,13 @@
               $("#result")
                 .find(".modal-body")
                 .html(
-                  "<h3><b>" +
+                  "<h2><b>" +
                     data.name +
-                    "</b></h3>" +
+                    "</b></h2>" +
                     "<br>" +
                     "<img src=" +
                     data.photo +
-                    " alt='profile_photo' width='100%'>"
+                    " alt='There is a problem uploading the image' width='100%'>"
                 );
               $("#result").modal("show");
               $("#result").on("hide.bs.modal", function(e) {
