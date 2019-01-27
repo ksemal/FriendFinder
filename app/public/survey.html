@@ -48,20 +48,16 @@
 
       <div class="input-group mb-3">
         <div class="input-group-prepend">
-          <span class="input-group-text" id="basic-addon1"
-            >Name (Required)</span
-          >
+          <span class="input-group-text">Name (Required)</span>
         </div>
-        <input type="text" class="form-control" aria-label="Name" />
+        <input type="text" class="form-control" aria-label="Name" id="name" />
       </div>
 
       <div class="input-group mb-3">
         <div class="input-group-prepend">
-          <span class="input-group-text" id="basic-addon1"
-            >Link to Photo Image (Required)</span
-          >
+          <span class="input-group-text">Link to Photo Image (Required)</span>
         </div>
-        <input type="text" class="form-control" aria-label="Name" />
+        <input type="text" class="form-control" aria-label="Photo" id="photo" />
       </div>
 
       <hr />
@@ -72,7 +68,7 @@
           >When you eat pineapple pizza do you throw pineapple chunks
           away?</label
         >
-        <select class="form-control">
+        <select class="form-control" id="q1">
           <option value="" disabled selected>Select an Option</option>
           <option value="1">1 (Strongly Disagree)</option>
           <option value="2">2</option>
@@ -82,7 +78,7 @@
         </select>
         <h3>Question 2</h3>
         <label for="sel2">You strongly believe in conspiracy theories</label>
-        <select class="form-control">
+        <select class="form-control" id="q2">
           <option value="" disabled selected>Select an Option</option>
           <option value="1">1 (Strongly Disagree)</option>
           <option value="2">2</option>
@@ -96,7 +92,7 @@
           actual banana is in form of a human face begging you not to eat him.
           Would you eat the banana?</label
         >
-        <select class="form-control">
+        <select class="form-control" id="q3">
           <option value="" disabled selected>Select an Option</option>
           <option value="1">1 (Strongly Disagree)</option>
           <option value="2">2</option>
@@ -109,7 +105,7 @@
           >You often find that your head is full of information and ideas that
           no one else in the room is familiar with</label
         >
-        <select class="form-control">
+        <select class="form-control" id="q4">
           <option value="" disabled selected>Select an Option</option>
           <option value="1">1 (Strongly Disagree)</option>
           <option value="2">2</option>
@@ -122,7 +118,7 @@
           >Very often you do unexpected things just to get a reaction from
           people</label
         >
-        <select class="form-control">
+        <select class="form-control" id="q5">
           <option value="" disabled selected>Select an Option</option>
           <option value="1">1 (Strongly Disagree)</option>
           <option value="2">2</option>
@@ -134,7 +130,7 @@
         <label for="sel6"
           >When you go upstairs you always count your steps</label
         >
-        <select class="form-control">
+        <select class="form-control" id="q6">
           <option value="" disabled selected>Select an Option</option>
           <option value="1">1 (Strongly Disagree)</option>
           <option value="2">2</option>
@@ -144,7 +140,7 @@
         </select>
         <h3>Question 7</h3>
         <label for="sel7">You agree that a hot dog is a sandwich</label>
-        <select class="form-control">
+        <select class="form-control" id="q7">
           <option value="" disabled selected>Select an Option</option>
           <option value="1">1 (Strongly Disagree)</option>
           <option value="2">2</option>
@@ -157,7 +153,7 @@
           >The only way to stay safe in the face of a charging elephant is to
           jump on the elephant's trunk</label
         >
-        <select class="form-control">
+        <select class="form-control" id="q8">
           <option value="" disabled selected>Select an Option</option>
           <option value="1">1 (Strongly Disagree)</option>
           <option value="2">2</option>
@@ -167,7 +163,7 @@
         </select>
         <h3>Question 9</h3>
         <label for="sel9">Would you eat a live spider for $100000?</label>
-        <select class="form-control">
+        <select class="form-control" id="q9">
           <option value="" disabled selected>Select an Option</option>
           <option value="1">1 (Strongly Disagree)</option>
           <option value="2">2</option>
@@ -177,7 +173,7 @@
         </select>
         <h3>Question 10</h3>
         <label for="sel10">Whould you ever join the circus?</label>
-        <select class="form-control">
+        <select class="form-control" id="q10">
           <option value="" disabled selected>Select an Option</option>
           <option value="1">1 (Strongly Disagree)</option>
           <option value="2">2</option>
@@ -186,11 +182,8 @@
           <option value="5">5(Strongly Agree)</option>
         </select>
       </div>
-      <a href="/"
-        ><button id="submit" class="btn btn-outline-light btn-lg btn-block">
-          <i class="fas fa-poll-people"></i> Submit
-        </button></a
-      >
+
+      <button id="submit" class="btn btn-lg btn-block">Submit</button>
       <hr />
       <p>
         <a href="/api/friends">API Friends List</a> |
@@ -198,6 +191,44 @@
       </p>
     </div>
 
-    <script type="text/javascript"></script>
+    <script type="text/javascript">
+      function Friend(name, photo, scores) {
+        this.name = name;
+        this.photo = photo;
+        this.scores = scores;
+      }
+      $("#submit").on("click", function() {
+        event.preventDefault();
+        var arr = [
+          $("#q1").val(),
+          $("#q2").val(),
+          $("#q3").val(),
+          $("#q4").val(),
+          $("#q5").val(),
+          $("#q6").val(),
+          $("#q7").val(),
+          $("#q8").val(),
+          $("#q9").val(),
+          $("#q10").val()
+        ];
+        console.log(arr);
+        if (
+          $("#name").val() === "" ||
+          $("#photo").val() === "" ||
+          arr.indexOf("") > 0
+        ) {
+          alert("Please fill out all fields before submitting!");
+        } else {
+          var friend = new Friend($("#name").val(), $("#photo").val(), arr);
+
+          $.ajax({ url: "/api/friends", method: "POST", data: friend }).done(
+            function(data) {
+              alert("Best match" + "<hr>" + data + "<br>");
+              window.location.href = "/survey";
+            }
+          );
+        }
+      });
+    </script>
   </body>
 </html>
