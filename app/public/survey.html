@@ -3,12 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <title>Friend Finder</title>
+    <script src="https://code.jquery.com/jquery.js"></script>
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
       integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
       crossorigin="anonymous"
     />
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+      integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+      crossorigin="anonymous"
+    ></script>
     <link
       rel="stylesheet"
       href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
@@ -19,7 +25,6 @@
       href="https://fonts.googleapis.com/css?family=Maven+Pro"
       rel="stylesheet"
     />
-    <script src="https://code.jquery.com/jquery.js"></script>
     <style>
       #submit {
         text-align: center;
@@ -191,6 +196,66 @@
       </p>
     </div>
 
+    <div id="error" class="modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Oops</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Please fill out all fields before submitting!</p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Ok, I'll fix it!
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="result" class="modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              Congrats! We found the best match for you!
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script type="text/javascript">
       function Friend(name, photo, scores) {
         this.name = name;
@@ -211,20 +276,34 @@
           $("#q9").val(),
           $("#q10").val()
         ];
-        console.log(arr);
+        console.log(arr.indexOf(""));
+        console.log(arr[1]);
         if (
           $("#name").val() === "" ||
           $("#photo").val() === "" ||
-          arr.indexOf("") > 0
+          arr.indexOf(null) != "-1"
         ) {
-          alert("Please fill out all fields before submitting!");
+          $("#error").modal("show");
         } else {
           var friend = new Friend($("#name").val(), $("#photo").val(), arr);
 
           $.ajax({ url: "/api/friends", method: "POST", data: friend }).done(
             function(data) {
-              alert("Best match" + "<hr>" + data + "<br>");
-              window.location.href = "/survey";
+              $("#result")
+                .find(".modal-body")
+                .html(
+                  "<h3><b>" +
+                    data.name +
+                    "</b></h3>" +
+                    "<br>" +
+                    "<img src=" +
+                    data.photo +
+                    " alt='profile_photo' width='100%'>"
+                );
+              $("#result").modal("show");
+              $("#result").on("hide.bs.modal", function(e) {
+                window.location.href = "/survey";
+              });
             }
           );
         }

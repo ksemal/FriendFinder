@@ -25,13 +25,15 @@ router.post("/friends", function(req, res) {
       name = element.name;
       photo = element.photo;
     }
-    console.log("Min: " + min);
-    console.log("Dif:" + difference);
   });
   console.log("Name: " + name);
+  var result = {
+    name: name,
+    photo: photo
+  };
 
   friends.push(req.body);
-  res.send(name);
+  res.send(result);
 });
 
 module.exports = router;
