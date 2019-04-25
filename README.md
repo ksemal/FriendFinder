@@ -12,3 +12,9 @@ A survey has 10 questions. Each answer is on a scale of 1 to 5 based on how much
 - [express.js]
 
 I think the biggest technical challenge was to write an algorithm to handle the compatibility logic of the survey result, as well as to create modular, mountable route handlers.
+
+## Screenshots:
+
+![project screenshots](app/images/screencapture_1.png)
+
+![project screenshots](app/images/screencapture_2.png)
